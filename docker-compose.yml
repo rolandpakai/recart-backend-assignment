@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: recart-admin
+      MONGO_INITDB_ROOT_PASSWORD: supersecret
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
