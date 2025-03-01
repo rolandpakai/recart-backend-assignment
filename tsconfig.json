@@ -1,0 +1,28 @@
+{
+  "include": [
+    "src",
+    "src/@types"
+  ],
+  "exclude": [
+    "coverage",
+    "node_modules",
+    "dist",
+    "junit",
+    "tests"
+  ],
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true, 
+    "strict": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist",
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ESNext",
+    ],
+    "esModuleInterop": true
+  }
+}
