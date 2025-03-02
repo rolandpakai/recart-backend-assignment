@@ -11,7 +11,6 @@ export const LineItemsSchema = z.array(
 
 export const WebhookSchema = z.object({
   id: z.string(),
-  topic: z.string(),
   line_items: LineItemsSchema.default([]),
   updated_at: z.string(),
 });

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../app';
 import { sessionFindByShopifyCartId } from '../db/dao/session-dao';
-import { SHOPIFY_CART_ID } from '../defaults';
+import { HEADER_SHOPIFY_TOPIC, SHOPIFY_CART_ID, TOPIC_CARTS_UPDATE } from '../defaults';
 import { Webhook } from '../types/Webhook';
 import convertCurrency from "../services/convertCurrency";
 
@@ -13,7 +13,6 @@ describe('POST /webhooks', () => {
 
     const requestBody = {
       id: SHOPIFY_CART_ID,
-      topic: 'carts/update',
       updated_at: new Date().toISOString(),
       line_items: [{
         product_id: '788032119674292922',
@@ -29,7 +28,7 @@ describe('POST /webhooks', () => {
       itemCount: 1,
     }
 
-    const response = await sendWebhookAPIRequest(requestBody);
+    const response = await sendWebhookAPIRequest(TOPIC_CARTS_UPDATE, requestBody);
     expect(response.status).toBe(200);
     const sessionDoc = await getSessionByShopifyCartId();
     expect(sessionDoc).not.toBeNull();
@@ -46,7 +45,6 @@ describe('POST /webhooks', () => {
 
     const requestBody = {
       id: SHOPIFY_CART_ID,
-      topic: 'carts/update',
       updated_at: new Date().toISOString(),
       line_items: [{
           product_id: '788032119674292922',
@@ -68,7 +66,7 @@ describe('POST /webhooks', () => {
       itemCount: 10,
     }
 
-    const response = await sendWebhookAPIRequest(requestBody);
+    const response = await sendWebhookAPIRequest(TOPIC_CARTS_UPDATE, requestBody);
     expect(response.status).toBe(200);
     const sessionDoc = await getSessionByShopifyCartId();
     expect(sessionDoc).not.toBeNull();
@@ -83,7 +81,7 @@ describe('POST /webhooks', () => {
   it('should response 400 and return with error when the webhook is outdated', async () => {
     const requestBody = {
       id: SHOPIFY_CART_ID,
-      topic: 'carts/update',
+      topic: TOPIC_CARTS_UPDATE,
       updated_at: new Date('1960-01-01T00:00:00.000Z').toISOString(),
       line_items: [{
         product_id: '788032119674292922',
@@ -93,15 +91,18 @@ describe('POST /webhooks', () => {
       }]
     } as Webhook;
 
-    const response = await sendWebhookAPIRequest(requestBody);
+    const response = await sendWebhookAPIRequest(TOPIC_CARTS_UPDATE, requestBody);
     expect(response.status).toBe(400);
     expect(response.body.error).toEqual('Outdated Webhook: 1960-01-01T00:00:00.000Z');
   });
 });
 
-const sendWebhookAPIRequest = async (requestBody: Webhook) => {
-  return await request(app).post('/api/webhooks').send(requestBody)
-}
+const sendWebhookAPIRequest = async (topic: string, requestBody: Webhook) => {
+  return await request(app)
+    .post('/api/webhooks')
+    .set(HEADER_SHOPIFY_TOPIC, topic)
+    .send(requestBody);
+};
 
 const getSessionByShopifyCartId = async () => {
   return await sessionFindByShopifyCartId(SHOPIFY_CART_ID);
