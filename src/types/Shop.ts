@@ -1,5 +1,5 @@
 export type Shop = {
   id?: string;
-  domain: string;
+  url: string;
   currency: string;
 }

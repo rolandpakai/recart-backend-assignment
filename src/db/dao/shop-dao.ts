@@ -12,7 +12,7 @@ export const shopFindById =  async (id: string): Promise<Shop | null> => {
   return shop ? shop.toObject({ transform: transformMongoId }) : null;
 }
 
-export const shopFindByDomain = async (domain: string): Promise<Shop | null> => {
-  const shop = await ShopModel.findOne({ domain });
+export const shopFindByUrl = async (url: string): Promise<Shop | null> => {
+  const shop = await ShopModel.findOne({ url });
   return shop ? shop.toObject({ transform: transformMongoId }) : null;
 };

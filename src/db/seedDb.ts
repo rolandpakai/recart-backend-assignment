@@ -2,11 +2,11 @@
 import { Types } from "mongoose";
 import { createSession } from "./dao/session-dao";
 import { createShop } from "./dao/shop-dao";
-import { DEFAULT_SHOP_CURRENCY, DEFAULT_SHOP_DOMAIN, SHOPIFY_CART_ID } from "../defaults";
+import { DEFAULT_SHOP_CURRENCY, DEFAULT_SHOP_URL, SHOPIFY_CART_ID } from "../defaults";
 
 const seedDb = async () => {
   const shop = {
-    domain: DEFAULT_SHOP_DOMAIN,
+    url: DEFAULT_SHOP_URL,
     currency: DEFAULT_SHOP_CURRENCY,
   };
 
